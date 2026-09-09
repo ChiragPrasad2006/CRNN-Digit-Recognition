@@ -216,3 +216,38 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Machine Learning & Deep Learning (PyTorch, CRNN)
+data/
+dataset/
+datasets/
+*.pt
+*.pth
+*.pwf
+*.bin
+*.ckpt
+*.onnx
+*.engine
+*.tflite
+checkpoints/
+saved_models/
+weights/
+
+# Training Logs & Experiment Tracking
+runs/
+logs/
+wandb/
+lightning_logs/
+.tensorboard/
+
+# IDE & Editor Settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS Specific
+.DS_Store
+Thumbs.db
+desktop.ini
+
