@@ -26,18 +26,20 @@ class DigitRecognitionCRNN(nn.Module):
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2)
         )
-        self.spatial_flatten=nn.Flatten(start_dim=2,end_dim=3)  # important as CNN reverses the order of [batch,channels,height*width] while RNN takes in [batch, height*width,channels]
-        self.block_3=nn.RNN(input_size=hidden_shape,hidden_size=hidden_shape,num_layers=3,batch_first=True,nonlinearity='relu') #3 RNN layers using ReLU
-        self.block_4=nn.Linear(in_features=hidden_shape,out_features=output_shape)
+        self.spatial_flatten=nn.Flatten(start_dim=2,end_dim=3)  # important as CNN gives the order in [batch,channels,height*width] while RNN takes in [batch, height*width,channels]
+        self.linear_1=nn.Linear(in_features=hidden_shape,out_features=hidden_shape)
+        self.block_3=nn.RNN(input_size=hidden_shape,hidden_size=hidden_shape,num_layers=2,batch_first=True,nonlinearity='relu') #3 RNN layers using ReLU
+        self.linear_2=nn.Linear(in_features=hidden_shape,out_features=output_shape)
 
     def forward(self,x):
         x=self.block_1(x)
         x=self.block_2(x)
         x=self.spatial_flatten(x)
-        x=x.transpose(1,2)
+        x=x.transpose(1,2)   # important as CNN reverses the order of [batch,channels,height*width] while RNN takes in [batch, height*width,channels]
+        x=self.linear_1(x)
         out,_=self.block_3(x)
-        out=out[:, -1, :]
-        x=self.block_4(out)
+        out=out[:, -1, :]    # passing the output of RNN to Linear layer, since RNN gives output in tuples, we need to pass only the last time step's output to the linear layer which gives the final result
+        x=self.linear_2(out)
         return x
 
 
