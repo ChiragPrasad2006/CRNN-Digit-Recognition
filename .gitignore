@@ -222,7 +222,6 @@ data/
 dataset/
 datasets/
 *.pt
-*.pth
 *.pwf
 *.bin
 *.ckpt
